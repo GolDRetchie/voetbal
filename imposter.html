@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Voetbal Imposter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="backbar show" id="backbar"><button id="backBtn"><span class="arr">‹</span> <span id="backLabel">Spellen</span></button></div>
+
+<div class="wrap">
+
+  <!-- SETUP -->
+  <section class="screen active" id="setup">
+    <div class="kicker">Party Game · Pass &amp; Play</div>
+    <h1>Voetbal<span class="imp">Imposter</span></h1>
+    <p class="sub">Iedereen kent dezelfde voetballer — behalve de imposter. Geef om de beurt één hint en ontmasker de bedrieger.</p>
+
+    <div class="field">
+      <div class="lab">Spelers <small>geef de telefoon door</small></div>
+      <div class="stepper">
+        <button onclick="bump('players',-1)">–</button>
+        <span class="val" id="playersVal">5</span>
+        <button onclick="bump('players',1)">+</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="lab">Imposters <small id="impMax"></small></div>
+      <div class="stepper">
+        <button onclick="bump('imps',-1)">–</button>
+        <span class="val" id="impsVal">1</span>
+        <button onclick="bump('imps',1)">+</button>
+      </div>
+    </div>
+
+    <div class="field" style="display:block">
+      <div class="lab" style="margin-bottom:12px">Imposter krijgt</div>
+      <div class="seg" id="modeSeg">
+        <button class="on" data-mode="blind">Niets (moeilijk)</button>
+        <button data-mode="hint">Hints</button>
+      </div>
+    </div>
+
+    <div class="field" style="display:block">
+      <div class="lab" style="margin-bottom:12px">Oud-spelers <small>legendes &amp; gestopte spelers</small></div>
+      <div class="seg" id="retiredSeg">
+        <button class="on" data-retired="yes">Insluiten</button>
+        <button data-retired="no">Alleen actief</button>
+      </div>
+    </div>
+
+    <button class="btn btn-go" onclick="startGame()">Start wedstrijd ⚽</button>
+  </section>
+
+  <!-- PASS / READY -->
+  <section class="screen" id="pass">
+    <div class="kicker">Geef door</div>
+    <div class="turn-name" id="passName">Speler 1</div>
+    <div class="turn-hint">Zorg dat niemand meekijkt. Tik om je kaart te zien.</div>
+    <button class="btn btn-go" onclick="showCard()">Onthul mijn kaart 👀</button>
+  </section>
+
+  <!-- CARD -->
+  <section class="screen" id="cardScreen">
+    <div class="card" id="card" onclick="hideCard()">
+      <div class="jersey" id="jerseyNum">10</div>
+    </div>
+    <div class="tap-hint">Tik op de kaart om te verbergen &amp; door te geven →</div>
+  </section>
+
+  <!-- DISCUSS -->
+  <section class="screen" id="discuss">
+    <div class="kicker">Aftrap</div>
+    <h1 style="font-size:clamp(38px,12vw,58px)">De discussie</h1>
+    <p class="sub">Om de beurt geeft iedereen <b>één</b> hint over de voetballer — zonder de naam te zeggen. De imposter bluft mee.</p>
+
+    <div class="order">
+      <div class="ttl">Speelvolgorde</div>
+      <ul id="orderList"></ul>
+    </div>
+
+    <div id="timerBox" style="display:none">
+      <div class="timer" id="timer">1:30</div>
+    </div>
+    <button class="btn btn-ghost" id="timerBtn" onclick="toggleTimer()">⏱ Start 90 sec timer</button>
+    <button class="btn btn-go" onclick="go('reveal'); buildReveal()" style="margin-top:12px">Stemmen &amp; onthullen</button>
+  </section>
+
+  <!-- REVEAL -->
+  <section class="screen" id="reveal">
+    <div class="kicker">Fluitsignaal</div>
+    <h1 style="font-size:clamp(40px,13vw,60px)">Onthulling</h1>
+    <div class="answer">
+      <small>De voetballer was</small>
+      <div class="p" id="answerPlayer">—</div>
+    </div>
+    <div class="reveal-list" id="revealList"></div>
+    <button class="btn btn-go" onclick="newRound()">Nieuwe ronde</button>
+    <button class="btn btn-ghost" onclick="go('setup')">Terug naar instellingen</button>
+  </section>
+
+</div>
+
+<script src="data.js"></script>
+<script>
+  let cfg = {players:5, imps:1, mode:'blind', retired:true};
+  let state = {roles:[], idx:0, player:'', order:[], jersey:[]};
+  let timer = {id:null, left:90, running:false};
+
+  function bump(key,d){
+    if(key==='players'){
+      cfg.players = Math.min(12, Math.max(3, cfg.players+d));
+      document.getElementById('playersVal').textContent = cfg.players;
+      const max = Math.max(1, Math.floor(cfg.players/3));
+      cfg.imps = Math.min(cfg.imps, max);
+      document.getElementById('impsVal').textContent = cfg.imps;
+    } else {
+      const max = Math.max(1, Math.floor(cfg.players/3));
+      cfg.imps = Math.min(max, Math.max(1, cfg.imps+d));
+      document.getElementById('impsVal').textContent = cfg.imps;
+    }
+    updMax();
+  }
+  function updMax(){
+    const max = Math.max(1, Math.floor(cfg.players/3));
+    document.getElementById('impMax').textContent = `max ${max}`;
+  }
+  document.getElementById('modeSeg').addEventListener('click',e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    document.querySelectorAll('#modeSeg button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); cfg.mode = b.dataset.mode;
+  });
+  document.getElementById('retiredSeg').addEventListener('click',e=>{
+    const b = e.target.closest('button'); if(!b) return;
+    document.querySelectorAll('#retiredSeg button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); cfg.retired = b.dataset.retired==='yes';
+  });
+
+  function startGame(){
+    state.player = getPool(cfg.retired)[(Math.random()*getPool(cfg.retired).length)|0];
+    const idxs = shuffle([...Array(cfg.players).keys()]);
+    const impSet = new Set(idxs.slice(0,cfg.imps));
+    state.roles = [...Array(cfg.players).keys()].map(i=>impSet.has(i)?'imposter':'crew');
+    state.jersey = [...Array(cfg.players).keys()].map(()=>(Math.random()*98+1|0));
+    state.idx = 0;
+    state.order = shuffle([...Array(cfg.players).keys()].map(i=>`Speler ${i+1}`));
+    preparePass();
+  }
+
+  function preparePass(){
+    document.getElementById('passName').textContent = `Speler ${state.idx+1}`;
+    go('pass');
+  }
+
+  function showCard(){
+    const role = state.roles[state.idx];
+    const card = document.getElementById('card');
+    card.classList.toggle('imposter', role==='imposter');
+    let inner = `<div class="jersey">${state.jersey[state.idx]}</div>`;
+    if(role==='imposter'){
+      if(cfg.mode==='hint'){
+        const chips = hintsFor(state.player).map(h=>`<span class="hchip">${h}</span>`).join('');
+        inner += `<div class="big">IMPOSTER</div>
+                  <div class="tip">Je weet de speler niet, maar dit weet je wél:</div>
+                  <div class="hints">${chips}</div>
+                  <div class="tip" style="margin-top:14px">Bluf mee 😏</div>`;
+      } else {
+        inner += `<div class="big">IMPOSTER</div>
+                  <div class="tip">Je weet de speler NIET. Bluf mee en kijk goed naar de hints van anderen.</div>`;
+      }
+    } else {
+      inner += `<div class="role-tag">Jouw voetballer</div>
+                <div class="player">${state.player}</div>
+                <div class="cat">Geef straks subtiele hints — verraad jezelf niet.</div>`;
+    }
+    card.innerHTML = inner;
+    go('cardScreen');
+  }
+
+  function hideCard(){
+    state.idx++;
+    if(state.idx < cfg.players){ preparePass(); }
+    else { buildDiscuss(); go('discuss'); }
+  }
+
+  function buildDiscuss(){
+    document.getElementById('orderList').innerHTML = state.order.map(n=>`<li>${n}</li>`).join('');
+    resetTimer();
+  }
+
+  function toggleTimer(){
+    const box=document.getElementById('timerBox'), btn=document.getElementById('timerBtn');
+    if(!timer.running){
+      box.style.display='block'; btn.textContent='⏸ Pauzeer';
+      timer.running=true;
+      timer.id=setInterval(()=>{
+        timer.left--; renderTimer();
+        if(timer.left<=0){clearInterval(timer.id);timer.running=false;btn.textContent='⏱ Opnieuw';navigator.vibrate&&navigator.vibrate(400);}
+      },1000);
+    } else {
+      clearInterval(timer.id); timer.running=false;
+      if(timer.left<=0){resetTimer(); btn.textContent='⏱ Start 90 sec timer';}
+      else btn.textContent='▶ Hervat';
+    }
+  }
+  function resetTimer(){clearInterval(timer.id);timer.running=false;timer.left=90;renderTimer();
+    document.getElementById('timerBox').style.display='none';
+    document.getElementById('timerBtn').textContent='⏱ Start 90 sec timer';}
+  function renderTimer(){const m=(timer.left/60|0),s=timer.left%60;
+    document.getElementById('timer').textContent=`${m}:${String(s).padStart(2,'0')}`;}
+
+  function buildReveal(){
+    document.getElementById('answerPlayer').textContent = state.player;
+    document.getElementById('revealList').innerHTML = state.roles.map((r,i)=>{
+      const imp = r==='imposter';
+      return `<div class="row ${imp?'imp':''}">
+        <span class="num">${i+1}</span>
+        <span class="who">Speler ${i+1}</span>
+        <span class="badge ${imp?'imp':'crew'}">${imp?'Imposter':'Team'}</span>
+      </div>`;
+    }).join('');
+  }
+
+  function newRound(){ resetTimer(); startGame(); }
+
+  /* ---- navigatie: terug-knop + home ---- */
+  let currentScreen = 'setup';
+  function go(id){
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    currentScreen = id;
+    // op het instellingenscherm gaat de knop naar de homepage, anders 'Terug'
+    document.getElementById('backLabel').textContent = (id==='setup') ? 'Spellen' : 'Terug';
+    window.scrollTo(0,0);
+  }
+  document.getElementById('backBtn').addEventListener('click', ()=>{
+    if(currentScreen==='cardScreen'){ go('pass'); }              // misklik herstellen
+    else if(currentScreen==='pass'){
+      if(state.idx>0){ state.idx--; preparePass(); } else { go('setup'); }
+    }
+    else if(currentScreen==='discuss'){ resetTimer(); go('setup'); }
+    else if(currentScreen==='reveal'){ resetTimer(); go('setup'); }
+    else { window.location.href = 'index.html'; }                // setup -> homepage
+  });
+
+  updMax();
+</script>
+</body>
+</html>

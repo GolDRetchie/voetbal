@@ -1,0 +1,204 @@
+/* =====================================================================
+   Gedeeld thema voor alle voetbalspellen (homepage + spelpagina's).
+   ===================================================================== */
+:root{
+  --pitch-0:#04140d;
+  --pitch-1:#062117;
+  --pitch-2:#0a3322;
+  --line:rgba(190,255,190,.14);
+  --lime:#c4ff34;
+  --lime-deep:#9be000;
+  --red:#ff4d5e;
+  --blue:#43d9ff;
+  --cream:#f3f7ee;
+  --muted:#8fb39c;
+  --ring:rgba(196,255,52,.55);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Sora',system-ui,sans-serif;
+  color:var(--cream);
+  background:
+    repeating-linear-gradient(180deg, rgba(255,255,255,.022) 0 78px, transparent 78px 156px),
+    radial-gradient(130% 95% at 50% -8%, #0f5034 0%, var(--pitch-1) 48%, var(--pitch-0) 100%);
+  background-attachment:fixed;
+  min-height:100dvh;overflow-x:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  padding:24px 18px;position:relative;
+}
+.wrap{position:relative;z-index:2;width:100%;max-width:440px;margin:auto 0}
+
+.screen{display:none;animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+.screen.active{display:block}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+.kicker{font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:var(--lime);
+  font-weight:700;margin-bottom:10px;text-align:center;}
+h1{font-family:'Anton',sans-serif;font-weight:400;line-height:.9;
+  font-size:clamp(46px,16vw,76px);text-align:center;text-transform:uppercase;letter-spacing:.01em;}
+h1 .imp{color:var(--lime);display:block;text-shadow:0 0 32px rgba(196,255,52,.35)}
+.sub{text-align:center;color:var(--muted);margin:14px 0 30px;font-size:15px;line-height:1.5}
+
+/* fields + steppers + segmented controls */
+.field{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:18px;
+  padding:18px 20px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.field .lab{font-weight:600;font-size:15px}
+.field .lab small{display:block;color:var(--muted);font-weight:400;font-size:12px;margin-top:3px}
+.stepper{display:flex;align-items:center;gap:14px}
+.stepper button{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);
+  background:rgba(255,255,255,.05);color:var(--cream);font-size:22px;font-weight:700;
+  display:grid;place-items:center;cursor:pointer;transition:.15s;font-family:'Anton'}
+.stepper button:active{transform:scale(.88)}
+.stepper button:hover{border-color:var(--ring)}
+.stepper .val{font-family:'Anton';font-size:30px;min-width:34px;text-align:center;color:var(--lime)}
+.seg{display:flex;gap:8px;background:rgba(255,255,255,.04);border:1px solid var(--line);
+  border-radius:14px;padding:5px}
+.seg button{flex:1;border:none;background:transparent;color:var(--muted);padding:10px;border-radius:10px;
+  font-family:'Sora';font-weight:700;font-size:13px;cursor:pointer;transition:.15s}
+.seg button.on{background:var(--lime);color:#06170d}
+
+/* buttons */
+.btn{width:100%;border:none;border-radius:50px;padding:19px;cursor:pointer;
+  font-family:'Sora';font-weight:800;font-size:17px;letter-spacing:.01em;transition:.18s;
+  display:flex;align-items:center;justify-content:center;gap:10px;}
+.btn-go{background:var(--lime);color:#06170d;box-shadow:0 12px 30px -8px rgba(196,255,52,.5)}
+.btn-go:active{transform:translateY(2px) scale(.99)}
+.btn-ghost{background:rgba(255,255,255,.06);color:var(--cream);border:1px solid var(--line);font-weight:600}
+.btn-ghost:active{transform:scale(.98)}
+.btn + .btn{margin-top:12px}
+
+/* fixed back / home button used across pages */
+.backbar{position:fixed;top:16px;left:16px;z-index:20;display:none}
+.backbar.show{display:block}
+.backbar a,.backbar button{display:flex;align-items:center;gap:7px;text-decoration:none;
+  background:rgba(8,28,18,.7);backdrop-filter:blur(8px);border:1px solid var(--line);color:var(--cream);
+  padding:10px 16px 10px 12px;border-radius:40px;cursor:pointer;
+  font-family:'Sora';font-weight:600;font-size:13px;transition:.15s}
+.backbar a:active,.backbar button:active{transform:scale(.94)}
+.backbar a:hover,.backbar button:hover{border-color:var(--ring)}
+.backbar .arr{font-family:'Anton';font-size:18px;line-height:1}
+
+/* =================== HOMEPAGE =================== */
+.wrap.home{max-width:1060px;margin-top:6vh}  /* <- titel hoger? maak dit kleiner (bv. 2vh of 0) */
+.home h1{font-size:clamp(38px,6vw,58px)}
+.home-head{text-align:center;margin-bottom:8px}
+.home-sub{text-align:center;color:var(--muted);margin:10px 0 26px;font-size:15px}
+.games{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;align-items:stretch}
+.game-card{display:flex;flex-direction:column;text-decoration:none;color:var(--cream);position:relative;overflow:hidden;
+  background:linear-gradient(150deg, var(--pitch-2), var(--pitch-1));
+  border:1px solid var(--line);border-radius:22px;padding:22px 22px;transition:.18s}
+.game-card:hover{border-color:var(--ring);transform:translateY(-2px)}
+.game-card:active{transform:scale(.99)}
+.game-card .emoji{font-size:34px;line-height:1;margin-bottom:14px;display:block}
+.game-card h2{font-family:'Anton';font-weight:400;text-transform:uppercase;font-size:30px;line-height:.95}
+.game-card p{color:var(--muted);font-size:14px;margin-top:8px;line-height:1.45}
+.game-card .meta{display:flex;gap:8px;margin-top:auto;padding-top:16px;flex-wrap:wrap}
+.game-card .pill{font-size:12px;font-weight:700;letter-spacing:.04em;padding:6px 12px;border-radius:30px;
+  background:rgba(196,255,52,.12);border:1px solid var(--line);color:var(--cream)}
+.game-card .go{position:absolute;top:22px;right:22px;font-family:'Anton';font-size:26px;color:var(--lime);
+  transition:.18s}
+.game-card:hover .go{transform:translateX(4px)}
+.game-card.accent-lime{border-left:4px solid var(--lime)}
+.game-card.accent-blue{border-left:4px solid var(--blue)}
+.game-card.soon{opacity:.55;pointer-events:none}
+.game-card.soon .go{color:var(--muted)}
+
+/* =================== IMPOSTER =================== */
+.turn-name{font-family:'Anton';font-size:clamp(40px,13vw,60px);text-align:center;text-transform:uppercase;margin-bottom:4px}
+.turn-hint{text-align:center;color:var(--muted);margin-bottom:30px;font-size:14px}
+.card{position:relative;border-radius:26px;padding:42px 26px;text-align:center;
+  border:1px solid var(--line);overflow:hidden;min-height:300px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(160deg, var(--pitch-2), var(--pitch-1));}
+.card .role-tag{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:18px}
+.card .player{font-family:'Anton';font-size:clamp(34px,11vw,52px);line-height:1;text-transform:uppercase}
+.card .cat{margin-top:16px;color:var(--muted);font-size:13px}
+.card.imposter{background:linear-gradient(160deg,#2a0c12,#160407);border-color:rgba(255,77,94,.4)}
+.card.imposter .big{font-family:'Anton';font-size:clamp(46px,15vw,68px);color:var(--red);line-height:.95;
+  text-shadow:0 0 30px rgba(255,77,94,.4)}
+.card.imposter .tip{margin-top:18px;color:#ffb3bb;font-size:13px;line-height:1.5;max-width:260px}
+.card.imposter .hints{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px;max-width:300px}
+.card.imposter .hchip{background:rgba(255,77,94,.16);border:1px solid rgba(255,77,94,.4);
+  color:#ffd2d7;padding:8px 14px;border-radius:30px;font-size:14px;font-weight:700;letter-spacing:.01em}
+.card .jersey{position:absolute;font-family:'Anton';font-size:200px;color:rgba(255,255,255,.025);
+  top:50%;left:50%;transform:translate(-50%,-50%);z-index:0;pointer-events:none}
+.card > *{position:relative;z-index:1}
+.tap-hint{text-align:center;color:var(--muted);font-size:13px;margin-top:22px;animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+.timer{font-family:'Anton';font-size:64px;text-align:center;color:var(--lime);letter-spacing:.04em;margin:6px 0 4px}
+.order{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin-bottom:24px}
+.order .ttl{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;font-weight:700}
+.order ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.order li{background:rgba(196,255,52,.1);border:1px solid var(--line);color:var(--cream);
+  padding:7px 13px;border-radius:30px;font-size:13px;font-weight:600}
+.reveal-list{display:flex;flex-direction:column;gap:10px;margin:22px 0 26px}
+.reveal-list .row{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.04);
+  border:1px solid var(--line);border-radius:16px;padding:14px 18px}
+.reveal-list .row.imp{background:rgba(255,77,94,.1);border-color:rgba(255,77,94,.35)}
+.reveal-list .num{font-family:'Anton';font-size:24px;width:30px;color:var(--muted)}
+.reveal-list .who{font-weight:700;flex:1}
+.reveal-list .badge{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:800;
+  padding:5px 11px;border-radius:30px}
+.badge.crew{background:rgba(196,255,52,.18);color:var(--lime)}
+.badge.imp{background:rgba(255,77,94,.2);color:var(--red)}
+.answer{text-align:center;background:rgba(196,255,52,.08);border:1px solid var(--line);
+  border-radius:18px;padding:20px;margin-bottom:24px}
+.answer small{color:var(--muted);font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:700}
+.answer .p{font-family:'Anton';font-size:34px;text-transform:uppercase;margin-top:8px}
+
+/* =================== WIE BEN IK? (2 varianten) =================== */
+/* houd smalle schermen netjes gecentreerd binnen een brede .wrap */
+.narrow{max-width:440px;margin-inline:auto}
+
+/* ---- Variant 1: Wie is het? (bord) ---- */
+.code-show{font-family:'Anton';font-size:clamp(48px,16vw,72px);letter-spacing:.2em;color:var(--lime);
+  text-align:center;margin:6px 0 22px;text-shadow:0 0 30px rgba(196,255,52,.3)}
+.code-input{width:100%;text-align:center;font-family:'Anton';font-size:46px;letter-spacing:.3em;
+  text-transform:uppercase;background:rgba(255,255,255,.05);border:1px solid var(--line);
+  color:var(--cream);border-radius:16px;padding:18px;outline:none;margin-bottom:6px}
+.code-input:focus{border-color:var(--ring)}
+.code-tag{display:inline-block;font-family:'Anton';font-size:15px;letter-spacing:.16em;color:var(--lime);
+  background:rgba(196,255,52,.1);border:1px solid var(--line);padding:6px 14px;border-radius:30px}
+.board-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;justify-content:center}
+.board-bar .count{font-family:'Anton';font-size:20px;color:var(--lime)}
+.board-bar .mini{border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--cream);
+  border-radius:30px;padding:10px 16px;font-family:'Sora';font-weight:700;font-size:13px;cursor:pointer;transition:.15s}
+.board-bar .mini:hover{border-color:var(--ring)}
+.board-bar .mini:active{transform:scale(.95)}
+.board{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+@media (max-width:560px){ .board{grid-template-columns:repeat(3,1fr)} }
+.select-hint{display:none;background:rgba(67,217,255,.14);border:1px solid rgba(67,217,255,.4);
+  color:#bfeeff;border-radius:14px;padding:12px 16px;margin-bottom:14px;text-align:center;font-weight:700;font-size:14px}
+.select-hint.show{display:block}
+.guess-card{position:relative;aspect-ratio:3/4;border-radius:12px;cursor:pointer;overflow:hidden;
+  border:1px solid var(--line);background:linear-gradient(160deg,var(--pitch-2),var(--pitch-1));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 6px;text-align:center;
+  transition:.15s;user-select:none}
+.guess-card:hover{border-color:var(--ring)}
+.guess-card .face{font-size:26px;margin-bottom:6px}
+.guess-card .nm{font-size:11px;font-weight:700;line-height:1.15}
+.guess-card.out{opacity:.32;filter:grayscale(.7)}
+.guess-card.out::after{content:"✕";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Anton';font-size:44px;color:var(--red)}
+
+/* ---- shared big show-card (variant 2 + secret reveal) ---- */
+.show-card{position:relative;border-radius:26px;padding:48px 26px;text-align:center;border:1px solid var(--line);
+  min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(160deg,var(--pitch-2),var(--pitch-1))}
+.show-card .role-tag{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:18px}
+.show-card .player{font-family:'Anton';font-size:clamp(34px,11vw,52px);line-height:1;text-transform:uppercase}
+.show-card .cat{margin-top:16px;color:var(--muted);font-size:13px;max-width:280px}
+
+/* ---- secret reveal overlay (variant 1) ---- */
+.overlay{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;padding:24px;
+  background:rgba(4,20,13,.95)}
+.overlay.show{display:flex}
+.overlay .inner{text-align:center;max-width:420px;width:100%}
+
+/* ---- variant 2 reveal list ---- */
+.res-list{display:flex;flex-direction:column;gap:8px;margin:18px 0 26px;max-height:52vh;overflow:auto}
+.res-list .row{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.04);
+  border:1px solid var(--line);border-radius:14px;padding:12px 16px}
+.res-list .num{font-family:'Anton';font-size:22px;width:30px;color:var(--muted)}
+.res-list .nm{flex:1;font-weight:700}
