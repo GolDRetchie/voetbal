@@ -189,10 +189,18 @@ const CLUBS = [
   "Juventus","AC Milan","Inter","Napoli","Paris Saint-Germain","Ajax","Benfica"
 ];
 const COUNTRIES = [
-  {n:"Brazilië",f:"🇧🇷"},{n:"Argentinië",f:"🇦🇷"},{n:"Frankrijk",f:"🇫🇷"},
-  {n:"Duitsland",f:"🇩🇪"},{n:"Spanje",f:"🇪🇸"},{n:"Italië",f:"🇮🇹"},
-  {n:"Portugal",f:"🇵🇹"},{n:"Engeland",f:"🏴󠁧󠁢󠁥󠁮󠁧󠁿"},{n:"Nederland",f:"🇳🇱"},
-  {n:"België",f:"🇧🇪"},{n:"Uruguay",f:"🇺🇾"},{n:"Kroatië",f:"🇭🇷"},
-  {n:"Polen",f:"🇵🇱"},{n:"Nigeria",f:"🇳🇬"},{n:"Senegal",f:"🇸🇳"},
-  {n:"Marokko",f:"🇲🇦"},{n:"Zweden",f:"🇸🇪"},{n:"Egypte",f:"🇪🇬"}
+  {n:"Brazilië",c:"br"},{n:"Argentinië",c:"ar"},{n:"Frankrijk",c:"fr"},
+  {n:"Duitsland",c:"de"},{n:"Spanje",c:"es"},{n:"Italië",c:"it"},
+  {n:"Portugal",c:"pt"},{n:"Engeland",c:"gb-eng"},{n:"Nederland",c:"nl"},
+  {n:"België",c:"be"},{n:"Uruguay",c:"uy"},{n:"Kroatië",c:"hr"},
+  {n:"Polen",c:"pl"},{n:"Nigeria",c:"ng"},{n:"Senegal",c:"sn"},
+  {n:"Marokko",c:"ma"},{n:"Zweden",c:"se"},{n:"Egypte",c:"eg"}
 ];
+// clubkleuren (geen logo's — auteursrechtelijk; wel een herkenbare kleurstip)
+const CLUB_COLORS = {
+  "Manchester United":"#DA291C","Manchester City":"#6CABDD","Liverpool":"#C8102E",
+  "Arsenal":"#EF0107","Chelsea":"#034694","Tottenham":"#132257","Real Madrid":"#FEBE10",
+  "Barcelona":"#A50044","Atlético Madrid":"#CB3524","Bayern München":"#DC052D",
+  "Borussia Dortmund":"#FDE100","Juventus":"#d4d4d4","AC Milan":"#FB090B","Inter":"#1E71B8",
+  "Napoli":"#12A0D7","Paris Saint-Germain":"#004170","Ajax":"#D2122E","Benfica":"#E80E0E"
+};

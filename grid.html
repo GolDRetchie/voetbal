@@ -44,7 +44,7 @@
 </div>
 
 <!-- modal: vakje invullen -->
-<div class="modal" id="cellModal">
+<div class="modal" id="cellModal" hidden>
   <div class="box">
     <h3 id="mTitle">Club × Land</h3>
     <div class="vs" id="mSub">Speler 1 — noem een voetballer</div>
@@ -55,7 +55,7 @@
 </div>
 
 <!-- modal: einde -->
-<div class="modal" id="endModal">
+<div class="modal" id="endModal" hidden>
   <div class="box">
     <div class="vs" id="endCap">Winnaar</div>
     <div class="win-name" id="endName">—</div>
@@ -87,11 +87,11 @@
   function render(){
     const g = document.getElementById('grid');
     let html = `<div class="gcell gcorner"><span class="t">Voetbal<br>Grid</span><span class="s">3 OP EEN RIJ</span></div>`;
-    // club-kopjes
-    st.clubs.forEach(c=> html += `<div class="gcell ghead club">${c}</div>`);
+    // club-kopjes (kleurstip in clubkleur — geen logo i.v.m. auteursrecht)
+    st.clubs.forEach(c=> html += `<div class="gcell ghead club"><span class="clubdot" style="background:${CLUB_COLORS[c]||'#8aa'}"></span>${c}</div>`);
     // rijen: landkopje + 3 vakjes
     st.countries.forEach((co,r)=>{
-      html += `<div class="gcell ghead country"><span class="flag">${co.f}</span>${co.n}</div>`;
+      html += `<div class="gcell ghead country"><img class="flagimg" src="https://flagcdn.com/w80/${co.c}.png" alt="" loading="lazy">${co.n}</div>`;
       for(let c=0;c<3;c++){
         const i = r*3+c, cell = st.cells[i];
         if(cell){
@@ -120,10 +120,10 @@
     document.getElementById('mSub').innerHTML = `${st.countries[r].f} Speler ${st.turn} — noem een voetballer voor dit vakje`;
     document.getElementById('mSub').className = `vs p${st.turn}`;
     const inp = document.getElementById('mInput'); inp.value=''; 
-    document.getElementById('cellModal').classList.add('show');
+    document.getElementById('cellModal').hidden=false;
     setTimeout(()=>inp.focus(),50);
   }
-  function closeModal(){ document.getElementById('cellModal').classList.remove('show'); st.pending=-1; }
+  function closeModal(){ document.getElementById('cellModal').hidden=true; st.pending=-1; }
   function placePending(){
     const i = st.pending; if(i<0) return;
     const name = document.getElementById('mInput').value.trim();
@@ -161,9 +161,9 @@
       document.getElementById('endName').textContent = 'Vol bord';
       document.getElementById('endName').className = 'win-name';
     }
-    setTimeout(()=>document.getElementById('endModal').classList.add('show'), 650);
+    setTimeout(()=>document.getElementById('endModal').hidden=false, 650);
   }
-  function closeEnd(){ document.getElementById('endModal').classList.remove('show'); }
+  function closeEnd(){ document.getElementById('endModal').hidden=true; }
 
   function undo(){
     if(st.over){ // laatste potje terugdraaien na winst

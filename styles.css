@@ -162,10 +162,10 @@ h1 .imp{color:var(--lime);display:block;text-shadow:0 0 32px rgba(196,255,52,.35
   background:rgba(196,255,52,.1);border:1px solid var(--line);padding:6px 14px;border-radius:30px}
 .board-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;justify-content:center}
 .board-bar .count{font-family:'Anton';font-size:20px;color:var(--lime)}
-.board-bar .mini{border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--cream);
+.mini{border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--cream);
   border-radius:30px;padding:10px 16px;font-family:'Sora';font-weight:700;font-size:13px;cursor:pointer;transition:.15s}
-.board-bar .mini:hover{border-color:var(--ring)}
-.board-bar .mini:active{transform:scale(.95)}
+.mini:hover{border-color:var(--ring)}
+.mini:active{transform:scale(.95)}
 .board{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
 @media (max-width:560px){ .board{grid-template-columns:repeat(3,1fr)} }
 .select-hint{display:none;background:rgba(67,217,255,.14);border:1px solid rgba(67,217,255,.4);
@@ -220,6 +220,8 @@ h1 .imp{color:var(--lime);display:block;text-shadow:0 0 32px rgba(196,255,52,.35
 .ghead.club{font-size:12px}
 .ghead.country{font-size:12px}
 .ghead .flag{font-size:26px;display:block;margin-bottom:4px}
+.flagimg{width:38px;height:auto;border-radius:3px;display:block;margin:0 auto 5px;box-shadow:0 1px 5px rgba(0,0,0,.45)}
+.clubdot{width:20px;height:20px;border-radius:50%;display:block;margin:0 auto 6px;box-shadow:0 0 0 2px rgba(255,255,255,.15)}
 .gcorner{background:transparent;border:none;display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
 .gcorner .t{font-family:'Anton';font-size:16px;line-height:.9;color:var(--lime);text-transform:uppercase}
 .gcorner .s{font-size:9px;color:var(--muted);margin-top:3px;letter-spacing:.1em}
@@ -235,9 +237,9 @@ h1 .imp{color:var(--lime);display:block;text-shadow:0 0 32px rgba(196,255,52,.35
 .play.f1 .who{color:var(--lime)} .play.f2 .who{color:var(--blue)}
 
 /* modal (cel invullen + winnaar) */
-.modal{position:fixed;inset:0;z-index:45;display:none;align-items:center;justify-content:center;padding:24px;
+.modal{position:fixed;inset:0;z-index:45;display:flex;align-items:center;justify-content:center;padding:24px;
   background:rgba(4,20,13,.92)}
-.modal.show{display:flex}
+.modal[hidden]{display:none}
 .modal .box{width:100%;max-width:380px;background:linear-gradient(160deg,var(--pitch-2),var(--pitch-1));
   border:1px solid var(--line);border-radius:22px;padding:26px;text-align:center}
 .modal .box h3{font-family:'Anton';font-weight:400;text-transform:uppercase;font-size:24px;line-height:1;margin-bottom:6px}
