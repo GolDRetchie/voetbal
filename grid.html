@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=2">
 </head>
 <body>
 
@@ -16,19 +16,67 @@
 <div class="wrap" style="max-width:560px">
 
   <!-- INTRO -->
-  <section class="screen active" id="intro">
+  <section class="screen active narrow" id="intro">
     <div class="kicker">Party Game · 2 spelers</div>
     <h1 style="font-size:clamp(40px,13vw,62px)">Voetbal<span class="imp">Grid</span></h1>
-    <p class="sub">3 clubs bovenaan, 3 landen opzij. Noem om de beurt een voetballer die bij die club én dat land hoort, en claim het vakje in je kleur. Eerste met <b>3 op een rij</b> wint.</p>
-    <p class="sub" style="margin-top:-14px;font-size:13px">De namen check je samen — de app houdt beurten, kleuren en winst bij. Vergissing? Gebruik "Terugdraaien".</p>
-    <button class="btn btn-go" onclick="newGrid(); go('game')">Start ⚽</button>
+    <p class="sub">3 clubs bovenaan, 3 landen opzij. Noem om de beurt een voetballer die bij die club én dat land hoort, en claim het vakje in je kleur. Eerste met <b>3 op een rij</b> wint. De namen check je samen.</p>
+    <div class="games">
+      <a class="game-card accent-lime" onclick="startLocal()" style="cursor:pointer">
+        <span class="go">&rsaquo;</span><span class="emoji">📱</span>
+        <h2>Op 1 telefoon</h2>
+        <p>Gewoon samen achter één scherm, om de beurt tikken.</p>
+      </a>
+      <a class="game-card accent-blue" onclick="go('rmenu')" style="cursor:pointer">
+        <span class="go">&rsaquo;</span><span class="emoji">📲</span>
+        <h2>Op afstand</h2>
+        <p>Elk een eigen telefoon, zelfde rooster via een code.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- REMOTE: menu -->
+  <section class="screen narrow" id="rmenu">
+    <div class="kicker">Op afstand</div>
+    <h1 style="font-size:clamp(34px,10vw,50px)">Samen spelen</h1>
+    <p class="sub">Eén speler start en deelt de code; de ander doet mee. Jullie krijgen dan hetzelfde rooster. Tijdens het spel tikt ieder de zetten op zijn eigen telefoon mee.</p>
+    <div class="games">
+      <a class="game-card accent-lime" onclick="remoteNew()" style="cursor:pointer">
+        <span class="go">&rsaquo;</span><span class="emoji">🆕</span><h2>Nieuw spel</h2>
+        <p>Genereer een code en deel 'm.</p>
+      </a>
+      <a class="game-card accent-blue" onclick="go('rjoin'); document.getElementById('gCodeInput').value=''; document.getElementById('gJoinErr').textContent=''" style="cursor:pointer">
+        <span class="go">&rsaquo;</span><span class="emoji">🔑</span><h2>Meedoen</h2>
+        <p>Voer de code van de ander in.</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- REMOTE: toon code -->
+  <section class="screen narrow" id="rstart">
+    <div class="kicker">Nieuw spel</div>
+    <h1 style="font-size:clamp(34px,10vw,50px)">Jouw code</h1>
+    <p class="sub">Geef deze code aan de andere speler. Die kiest "Meedoen" en typt 'm in — dan hebben jullie hetzelfde rooster.</p>
+    <div class="code-show" id="gCodeShow">-----</div>
+    <button class="btn btn-go" onclick="enterFromShown()">Naar het bord →</button>
+    <button class="btn btn-ghost" onclick="document.getElementById('gCodeShow').textContent=genCode(5)">🎲 Andere code</button>
+  </section>
+
+  <!-- REMOTE: code invoeren -->
+  <section class="screen narrow" id="rjoin">
+    <div class="kicker">Meedoen</div>
+    <h1 style="font-size:clamp(34px,10vw,50px)">Code invoeren</h1>
+    <p class="sub">Typ de code van de andere speler om hetzelfde rooster te krijgen.</p>
+    <input class="code-input" id="gCodeInput" maxlength="6" placeholder="CODE" autocomplete="off" autocapitalize="characters" spellcheck="false"
+           oninput="this.value=this.value.toUpperCase().replace(/[^A-Z]/g,'')">
+    <div id="gJoinErr" style="color:var(--red);text-align:center;min-height:20px;margin:4px 0 10px;font-size:13px"></div>
+    <button class="btn btn-go" onclick="remoteJoin()">Meedoen →</button>
   </section>
 
   <!-- GAME -->
   <section class="screen" id="game">
     <div class="grid-top">
       <div class="turn-pill" id="turnPill"><span class="turn-dot bg1"></span><span id="turnText">Speler 1</span></div>
-      <div style="display:flex;gap:8px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="mini" onclick="undo()">↶ Terugdraaien</button>
         <button class="mini" onclick="newPotje()">Nieuw potje</button>
         <button class="mini" onclick="newGrid()">🎲 Nieuw rooster</button>
@@ -37,6 +85,7 @@
     <div class="score-line">
       <span class="s1">Speler 1: <b id="sc1">0</b></span>
       <span class="s2">Speler 2: <b id="sc2">0</b></span>
+      <span class="code-tag" id="gCodeTag" style="display:none">CODE -----</span>
     </div>
     <div class="grid" id="grid"></div>
   </section>
@@ -64,32 +113,44 @@
   </div>
 </div>
 
-<script src="data.js"></script>
+<script src="data.js?v=2"></script>
 <script>
   const LINES = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-  let st = { clubs:[], countries:[], cells:[], turn:1, starter:1, over:false, scores:{1:0,2:0}, pending:-1, history:[] };
+  let st = { clubs:[], countries:[], cells:[], turn:1, starter:1, over:false, scores:{1:0,2:0}, pending:-1, history:[], code:'', remote:false };
 
+  /* ---- starten ---- */
+  function startLocal(){ st.remote=false; st.code=genCode(); buildFromCode(); go('game'); }
+  function remoteNew(){ st.remote=true; document.getElementById('gCodeShow').textContent=genCode(5); go('rstart'); }
+  function enterFromShown(){ st.remote=true; st.code=document.getElementById('gCodeShow').textContent; buildFromCode(); go('game'); }
+  function remoteJoin(){
+    const v=document.getElementById('gCodeInput').value.trim();
+    if(v.length<4){ document.getElementById('gJoinErr').textContent='Vul een geldige code in (min. 4 letters).'; return; }
+    st.remote=true; st.code=v; buildFromCode(); go('game');
+  }
+
+  /* ---- rooster opbouwen uit de code (zaadje) ---- */
+  function buildFromCode(){
+    st.clubs = seededShuffle(CLUBS, st.code).slice(0,3);
+    st.countries = seededShuffle(COUNTRIES, st.code+'-L').slice(0,3);
+    resetCells();
+    const tag=document.getElementById('gCodeTag');
+    if(st.remote){ tag.textContent='CODE '+st.code; tag.style.display=''; } else { tag.style.display='none'; }
+  }
   function newGrid(){
-    st.clubs = shuffle(CLUBS).slice(0,3);
-    st.countries = shuffle(COUNTRIES).slice(0,3);
-    resetCells();
+    if(st.remote){ remoteNew(); }                 // nieuwe code om te delen
+    else { st.code=genCode(); buildFromCode(); }
   }
-  function newPotje(){
-    st.starter = st.starter===1 ? 2 : 1;   // wisselende beginner
-    resetCells();
-  }
+  function newPotje(){ st.starter = st.starter===1?2:1; resetCells(); }
   function resetCells(){
     st.cells = Array(9).fill(null);
-    st.turn = st.starter; st.over = false; st.history = [];
+    st.turn = st.starter; st.over=false; st.history=[];
     render();
   }
 
   function render(){
     const g = document.getElementById('grid');
     let html = `<div class="gcell gcorner"><span class="t">Voetbal<br>Grid</span><span class="s">3 OP EEN RIJ</span></div>`;
-    // club-kopjes (kleurstip in clubkleur — geen logo i.v.m. auteursrecht)
     st.clubs.forEach(c=> html += `<div class="gcell ghead club"><span class="clubdot" style="background:${CLUB_COLORS[c]||'#8aa'}"></span>${c}</div>`);
-    // rijen: landkopje + 3 vakjes
     st.countries.forEach((co,r)=>{
       html += `<div class="gcell ghead country"><img class="flagimg" src="https://flagcdn.com/w80/${co.c}.png" alt="" loading="lazy">${co.n}</div>`;
       for(let c=0;c<3;c++){
@@ -104,7 +165,6 @@
       }
     });
     g.innerHTML = html;
-    // beurt + score
     document.getElementById('turnText').textContent = `Speler ${st.turn}`;
     document.getElementById('turnPill').querySelector('.turn-dot').className = `turn-dot bg${st.turn}`;
     document.getElementById('turnText').className = `p${st.turn}`;
@@ -115,11 +175,11 @@
   function openCell(i){
     if(st.over || st.cells[i]) return;
     st.pending = i;
-    const r = (i/3|0), c = i%3;
+    const r=(i/3|0), c=i%3;
     document.getElementById('mTitle').textContent = `${st.clubs[c]} × ${st.countries[r].n}`;
-    document.getElementById('mSub').innerHTML = `${st.countries[r].f} Speler ${st.turn} — noem een voetballer voor dit vakje`;
+    document.getElementById('mSub').textContent = `Speler ${st.turn} — noem een voetballer voor dit vakje`;
     document.getElementById('mSub').className = `vs p${st.turn}`;
-    const inp = document.getElementById('mInput'); inp.value=''; 
+    const inp = document.getElementById('mInput'); inp.value='';
     document.getElementById('cellModal').hidden=false;
     setTimeout(()=>inp.focus(),50);
   }
@@ -132,8 +192,8 @@
     closeModal();
     const win = checkWin();
     if(win){ endGame(win); return; }
-    if(st.cells.every(Boolean)){ endGame(null); return; }   // gelijkspel
-    st.turn = st.turn===1 ? 2 : 1;
+    if(st.cells.every(Boolean)){ endGame(null); return; }
+    st.turn = st.turn===1?2:1;
     render();
   }
   document.getElementById('mPlace').addEventListener('click', placePending);
@@ -149,35 +209,34 @@
     return null;
   }
   function endGame(win){
-    st.over = true; render();
+    st.over=true; render();
     if(win){
       st.scores[win.p]++; render();
       win.line.forEach(i=>{ const el=document.querySelector(`#grid .play[data-i="${i}"]`); if(el) el.classList.add('win'); });
-      document.getElementById('endCap').textContent = 'Winnaar 🏆';
-      document.getElementById('endName').textContent = `Speler ${win.p}`;
-      document.getElementById('endName').className = `win-name p${win.p}`;
+      document.getElementById('endCap').textContent='Winnaar 🏆';
+      document.getElementById('endName').textContent=`Speler ${win.p}`;
+      document.getElementById('endName').className=`win-name p${win.p}`;
     } else {
-      document.getElementById('endCap').textContent = 'Gelijkspel';
-      document.getElementById('endName').textContent = 'Vol bord';
-      document.getElementById('endName').className = 'win-name';
+      document.getElementById('endCap').textContent='Gelijkspel';
+      document.getElementById('endName').textContent='Vol bord';
+      document.getElementById('endName').className='win-name';
     }
     setTimeout(()=>document.getElementById('endModal').hidden=false, 650);
   }
   function closeEnd(){ document.getElementById('endModal').hidden=true; }
 
   function undo(){
-    if(st.over){ // laatste potje terugdraaien na winst
-      st.over=false; closeEnd();
-    }
+    if(st.over){ st.over=false; closeEnd(); }
     const i = st.history.pop();
     if(i===undefined) return;
-    st.cells[i] = null;
+    st.cells[i]=null;
     document.querySelectorAll('#grid .play.win').forEach(e=>e.classList.remove('win'));
-    st.turn = st.turn===1 ? 2 : 1;   // beurt terug naar wie net plaatste
+    st.turn = st.turn===1?2:1;
     render();
   }
 
-  /* navigatie */
+  /* ---- navigatie ---- */
+  const BACK = { rmenu:'intro', rstart:'rmenu', rjoin:'rmenu', game:'intro' };
   let currentScreen='intro';
   function go(id){
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -188,7 +247,7 @@
   }
   document.getElementById('backBtn').addEventListener('click', ()=>{
     if(currentScreen==='intro'){ window.location.href='index.html'; }
-    else { go('intro'); }
+    else { go(BACK[currentScreen] || 'intro'); }
   });
 </script>
 </body>
