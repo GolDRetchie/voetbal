@@ -202,3 +202,47 @@ h1 .imp{color:var(--lime);display:block;text-shadow:0 0 32px rgba(196,255,52,.35
   border:1px solid var(--line);border-radius:14px;padding:12px 16px}
 .res-list .num{font-family:'Anton';font-size:22px;width:30px;color:var(--muted)}
 .res-list .nm{flex:1;font-weight:700}
+
+/* =================== VOETBAL GRID =================== */
+.grid-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.turn-pill{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px}
+.turn-dot{width:18px;height:18px;border-radius:50%}
+.p1{color:var(--lime)} .p2{color:var(--blue)}
+.bg1{background:var(--lime)} .bg2{background:var(--blue)}
+.score-line{display:flex;gap:14px;justify-content:center;margin-bottom:18px;font-weight:700;font-size:14px}
+.score-line .s1{color:var(--lime)} .score-line .s2{color:var(--blue)}
+
+.grid{display:grid;grid-template-columns:minmax(62px,.72fr) repeat(3,1fr);gap:7px}
+.gcell{aspect-ratio:1;border-radius:12px;border:1px solid var(--line);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:6px;overflow:hidden;
+  background:linear-gradient(160deg,var(--pitch-2),var(--pitch-1))}
+.ghead{background:rgba(255,255,255,.05);font-weight:800;line-height:1.1}
+.ghead.club{font-size:12px}
+.ghead.country{font-size:12px}
+.ghead .flag{font-size:26px;display:block;margin-bottom:4px}
+.gcorner{background:transparent;border:none;display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.gcorner .t{font-family:'Anton';font-size:16px;line-height:.9;color:var(--lime);text-transform:uppercase}
+.gcorner .s{font-size:9px;color:var(--muted);margin-top:3px;letter-spacing:.1em}
+
+.play{cursor:pointer;transition:.12s;position:relative}
+.play:hover{border-color:var(--ring)}
+.play:active{transform:scale(.97)}
+.play .nm{font-size:11px;font-weight:700;line-height:1.15;word-break:break-word}
+.play.f1{background:rgba(196,255,52,.18);border:2px solid var(--lime)}
+.play.f2{background:rgba(67,217,255,.18);border:2px solid var(--blue)}
+.play.win{box-shadow:0 0 0 3px var(--cream) inset;filter:brightness(1.12)}
+.play .who{position:absolute;top:5px;right:7px;font-family:'Anton';font-size:13px}
+.play.f1 .who{color:var(--lime)} .play.f2 .who{color:var(--blue)}
+
+/* modal (cel invullen + winnaar) */
+.modal{position:fixed;inset:0;z-index:45;display:none;align-items:center;justify-content:center;padding:24px;
+  background:rgba(4,20,13,.92)}
+.modal.show{display:flex}
+.modal .box{width:100%;max-width:380px;background:linear-gradient(160deg,var(--pitch-2),var(--pitch-1));
+  border:1px solid var(--line);border-radius:22px;padding:26px;text-align:center}
+.modal .box h3{font-family:'Anton';font-weight:400;text-transform:uppercase;font-size:24px;line-height:1;margin-bottom:6px}
+.modal .box .vs{color:var(--muted);font-size:13px;margin-bottom:18px}
+.modal .box input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--cream);
+  border-radius:14px;padding:14px;font-family:'Sora';font-size:15px;outline:none;margin-bottom:14px}
+.modal .box input:focus{border-color:var(--ring)}
+.win-name{font-family:'Anton';font-size:54px;line-height:1}

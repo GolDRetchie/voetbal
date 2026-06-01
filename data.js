@@ -181,3 +181,18 @@ function seededShuffle(arr, seedStr){
   for(let i=a.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
   return a;
 }
+
+/* ---------- clubs & landen (voor het Voetbal Grid-spel) ---------- */
+const CLUBS = [
+  "Manchester United","Manchester City","Liverpool","Arsenal","Chelsea","Tottenham",
+  "Real Madrid","Barcelona","Atlético Madrid","Bayern München","Borussia Dortmund",
+  "Juventus","AC Milan","Inter","Napoli","Paris Saint-Germain","Ajax","Benfica"
+];
+const COUNTRIES = [
+  {n:"Brazilië",f:"🇧🇷"},{n:"Argentinië",f:"🇦🇷"},{n:"Frankrijk",f:"🇫🇷"},
+  {n:"Duitsland",f:"🇩🇪"},{n:"Spanje",f:"🇪🇸"},{n:"Italië",f:"🇮🇹"},
+  {n:"Portugal",f:"🇵🇹"},{n:"Engeland",f:"🏴󠁧󠁢󠁥󠁮󠁧󠁿"},{n:"Nederland",f:"🇳🇱"},
+  {n:"België",f:"🇧🇪"},{n:"Uruguay",f:"🇺🇾"},{n:"Kroatië",f:"🇭🇷"},
+  {n:"Polen",f:"🇵🇱"},{n:"Nigeria",f:"🇳🇬"},{n:"Senegal",f:"🇸🇳"},
+  {n:"Marokko",f:"🇲🇦"},{n:"Zweden",f:"🇸🇪"},{n:"Egypte",f:"🇪🇬"}
+];
