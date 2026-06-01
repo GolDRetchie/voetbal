@@ -192,9 +192,7 @@ const COUNTRIES = [
   {n:"Brazilië",c:"br"},{n:"Argentinië",c:"ar"},{n:"Frankrijk",c:"fr"},
   {n:"Duitsland",c:"de"},{n:"Spanje",c:"es"},{n:"Italië",c:"it"},
   {n:"Portugal",c:"pt"},{n:"Engeland",c:"gb-eng"},{n:"Nederland",c:"nl"},
-  {n:"België",c:"be"},{n:"Uruguay",c:"uy"},{n:"Kroatië",c:"hr"},
-  {n:"Polen",c:"pl"},{n:"Nigeria",c:"ng"},{n:"Senegal",c:"sn"},
-  {n:"Marokko",c:"ma"},{n:"Zweden",c:"se"},{n:"Egypte",c:"eg"}
+  {n:"België",c:"be"},{n:"Kroatië",c:"hr"},
 ];
 // clubkleuren (geen logo's — auteursrechtelijk; wel een herkenbare kleurstip)
 const CLUB_COLORS = {
