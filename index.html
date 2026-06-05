@@ -1,134 +1,67 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="nl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Crew Manager</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Spectral:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=14" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Voetbal Party Games</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="app">
+<div class="wrap home">
 
-    <!-- ============ SCREEN: MAIN MENU ============ -->
-    <section id="screen-newgame" class="screen is-active">
-      <header class="brand">
-        <span class="brand__plaque">Crew Manager</span>
-        <p class="brand__tag">Pick a crew or continue where you left off</p>
-      </header>
+  <div class="home-head">
+    <div class="kicker">Party Games</div>
+    <h1>Voetbal<span class="imp">Spellen</span></h1>
+  </div>
+  <p class="home-sub">Kies een spel. Eén telefoon, doorgeven maar.</p>
 
-      <section class="panel reveal" style="--d:1">
-        <h2 class="panel__title">Saved games</h2>
-        <div id="saved-list" class="saved-list"></div>
-      </section>
+  <div class="games">
 
-      <button id="new-game-btn" class="btn-gold" type="button">New game</button>
-    </section>
-
-    <!-- ============ SCREEN: NEW GAME SETUP ============ -->
-    <section id="screen-create" class="screen">
-      <header class="brand"><span class="brand__plaque" style="font-size:28px">New game</span></header>
-
-      <section class="panel reveal">
-        <label class="field">
-          <span class="field__label">Crew name</span>
-          <input id="crew-name" type="text" maxlength="28" autocomplete="off"
-                 placeholder="E.g. The Sunrise Pirates" />
-        </label>
-
-        <div class="field">
-          <span class="field__label">Choose your captain</span>
-          <div class="carousel-wrap" id="carousel-wrap">
-            <div class="carousel" id="captain-carousel" role="listbox" aria-label="Choose your captain"></div>
-          </div>
-        </div>
-
-        <div class="field">
-          <span class="field__label">Difficulty</span>
-          <div class="diff-list" id="difficulty-list" role="group" aria-label="Choose difficulty">
-            <button type="button" class="diff-card" data-diff="easy" aria-pressed="false">
-              <div class="diff-card__name">Easy <span>&middot; East Blue</span></div>
-              <div class="diff-card__desc">Rivals develop slowly. Build your legend at your own pace.</div>
-            </button>
-            <button type="button" class="diff-card is-selected" data-diff="normal" aria-pressed="true">
-              <div class="diff-card__name">Normal <span>&middot; Paradise</span></div>
-              <div class="diff-card__desc">Rivals keep pace. Earn the top spot with sharp management.</div>
-            </button>
-            <button type="button" class="diff-card" data-diff="hard" aria-pressed="false">
-              <div class="diff-card__name">Hard <span>&middot; New World</span></div>
-              <div class="diff-card__desc">Rivals outgrow you. Only a master reaches Laugh Tale.</div>
-            </button>
-          </div>
-        </div>
-
-        <p class="berries">Starting funds: <span id="start-berries">—</span></p>
-
-        <p id="form-hint" class="form-hint">Enter a crew name and choose a captain to start.</p>
-        <button id="start-btn" class="btn-gold" type="button" disabled>Start new game</button>
-      </section>
-
-      <div style="text-align:center;margin-top:6px"><button id="create-back" class="btn-ghost" type="button">Back</button></div>
-    </section>
-
-    <!-- ============ SCREEN: ALL SAVES ============ -->
-    <section id="screen-saves" class="screen">
-      <header class="brand"><span class="brand__plaque" style="font-size:28px">Saved games</span></header>
-      <section class="panel">
-        <h2 class="panel__title">Saved games <span id="saves-count" class="panel__count"></span></h2>
-        <div id="saves-all" class="saved-list"></div>
-      </section>
-      <div style="text-align:center;margin-top:6px"><button id="saves-back" class="btn-ghost" type="button">Back</button></div>
-    </section>
-
-    <!-- ============ SCREEN: HOME ============ -->
-    <section id="screen-home" class="screen">
-      <div id="home-content" class="home"></div>
-    </section>
-
-    <!-- ============ SCREEN: TRANSFER MARKET ============ -->
-    <section id="screen-market" class="screen">
-      <div id="market-content"></div>
-    </section>
-
-    <!-- ============ SCREEN: CREW & LINE-UP ============ -->
-    <section id="screen-crew" class="screen">
-      <div id="crew-content"></div>
-    </section>
-
-    <!-- ============ SCREEN: TRAINING ============ -->
-    <section id="screen-training" class="screen">
-      <div id="training-content"></div>
-    </section>
-
-    <section id="screen-league" class="screen">
-      <div id="league-content"></div>
-    </section>
-
-    <section id="screen-matchday" class="screen">
-      <div id="matchday-content"></div>
-    </section>
-
-    <section id="screen-battle" class="screen">
-      <div id="battle-content"></div>
-    </section>
-
-    <!-- ============ MODAL (confirm / info) ============ -->
-    <div id="modal-overlay" class="modal-overlay" aria-hidden="true">
-      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-        <h3 id="modal-title" class="modal__title">Confirm</h3>
-        <p id="modal-msg" class="modal__msg"></p>
-        <div class="modal__actions">
-          <button id="modal-cancel" class="btn-soft" type="button">Cancel</button>
-          <button id="modal-confirm" class="btn-danger" type="button">Delete</button>
-        </div>
+    <a class="game-card accent-lime" href="imposter.html">
+      <span class="go">›</span>
+      <span class="emoji">🕵️</span>
+      <h2>Imposter</h2>
+      <p>Iedereen kent dezelfde voetballer — behalve de imposter. Geef hints en ontmasker de bedrieger.</p>
+      <div class="meta">
+        <span class="pill">3–12 spelers</span>
+        <span class="pill">Bluffen</span>
       </div>
+    </a>
+
+    <a class="game-card accent-blue" href="wie-ben-ik.html">
+      <span class="go">›</span>
+      <span class="emoji">🤔</span>
+      <h2>Wie ben ik?</h2>
+      <p>Twee varianten: het klassieke "Wie is het?"-bord, of kaart-op-je-hoofd waarbij je raadt welke voetballer jij bent.</p>
+      <div class="meta">
+        <span class="pill">2+ spelers</span>
+        <span class="pill">2 varianten</span>
+      </div>
+    </a>
+
+    <a class="game-card accent-lime" href="grid.html">
+      <span class="go">›</span>
+      <span class="emoji">🔠</span>
+      <h2>Voetbal Grid</h2>
+      <p>3 clubs × 3 landen. Noem een speler die bij beide hoort en pak het vakje. Eerste met 3 op een rij wint.</p>
+      <div class="meta">
+        <span class="pill">2 spelers</span>
+        <span class="pill">3 op een rij</span>
+      </div>
+    </a>
+
+    <div class="game-card soon">
+      <span class="go">›</span>
+      <span class="emoji">⏳</span>
+      <h2>Binnenkort</h2>
+      <p>Meer spellen volgen — zelfde spelers, nieuwe spelvormen.</p>
+      <div class="meta"><span class="pill">In de maak</span></div>
     </div>
 
-  </main>
-
-  <script src="data-pirates.js?v=4"></script>
-  <script src="game.js?v=22"></script>
+  </div>
+</div>
 </body>
 </html>

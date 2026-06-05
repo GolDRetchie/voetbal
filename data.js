@@ -181,7 +181,6 @@ function seededShuffle(arr, seedStr){
   for(let i=a.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
   return a;
 }
-
 /* ---------- clubs & landen (voor het Voetbal Grid-spel) ---------- */
 const CLUBS = [
   "Manchester United","Manchester City","Liverpool","Arsenal","Chelsea","Tottenham",
@@ -192,7 +191,7 @@ const COUNTRIES = [
   {n:"Brazilië",c:"br"},{n:"Argentinië",c:"ar"},{n:"Frankrijk",c:"fr"},
   {n:"Duitsland",c:"de"},{n:"Spanje",c:"es"},{n:"Italië",c:"it"},
   {n:"Portugal",c:"pt"},{n:"Engeland",c:"gb-eng"},{n:"Nederland",c:"nl"},
-  {n:"België",c:"be"},{n:"Kroatië",c:"hr"},
+  {n:"België",c:"be"},
 ];
 // clubkleuren (geen logo's — auteursrechtelijk; wel een herkenbare kleurstip)
 const CLUB_COLORS = {
@@ -200,5 +199,5 @@ const CLUB_COLORS = {
   "Arsenal":"#EF0107","Chelsea":"#034694","Tottenham":"#132257","Real Madrid":"#FEBE10",
   "Barcelona":"#A50044","Atlético Madrid":"#CB3524","Bayern München":"#DC052D",
   "Borussia Dortmund":"#FDE100","Juventus":"#d4d4d4","AC Milan":"#FB090B","Inter":"#1E71B8",
-  "Napoli":"#12A0D7","Paris Saint-Germain":"#004170","Ajax":"#D2122E","Benfica":"#E80E0E"
+  "Napoli":"#12A0D7","Paris Saint-Germain":"#004170","Ajax":"#D2122E",
 };
